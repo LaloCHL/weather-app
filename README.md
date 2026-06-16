@@ -1,16 +1,44 @@
-# React + Vite
+# Weather App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A clean, responsive weather application built with React and Tailwind CSS.
 
-Currently, two official plugins are available:
+🌐 **Live demo:** https://weather-app-sand-pi-87.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![Weather App Screenshot](tokyo-ss.png)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🔍 Search weather by city name
+- 📍 Detect current location automatically
+- 🌡️ Toggle between Celsius and Fahrenheit
+- 📅 5-day forecast with weather icons
+- 🕐 Recent searches saved locally
+- 💀 Skeleton loader while fetching data
+- 📱 Fully responsive design
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 19
+- Tailwind CSS 3
+- Open-Meteo API (no API key required)
+- Vite
+- Deployed on Vercel
+
+## Technical decisions
+
+- **Custom hook (`useWeather`)** — separates all API and state logic from UI components, keeping them clean and reusable.
+- **Open-Meteo** — chosen because it's free, reliable, and requires no API key, making the project easy to clone and run.
+- **Tailwind CSS** — utility-first approach speeds up styling while keeping the bundle small.
+
+## Run locally
+
+```bash
+git clone https://github.com/LaloCHL/weather-app.git
+cd weather-app
+npm install
+npm run dev
+```
+
+## Author
+
+Eduardo Chan — [linkedin.com/in/chaneduardo](https://linkedin.com/in/chaneduardo)
