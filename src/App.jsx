@@ -1,5 +1,6 @@
 import SearchBar from './components/SearchBar'
 import { useWeather } from './hooks/useWeather'
+import Forecast from './components/Forecast'
 
 function App() {
   const { weather, loading, error, fetchWeather } = useWeather()
@@ -28,7 +29,7 @@ function App() {
           <p className="text-7xl font-thin mb-6">{weather.temperature}°</p>
           <div className="border-t border-white/20 pt-4 text-sm text-blue-200">
             Wind: {weather.windspeed} km/h
-          </div>
+          </div><Forecast forecast={weather.forecast} />
         </div>
       )}
     </div>

@@ -10,7 +10,6 @@ export function useWeather() {
     setError(null)
 
     try {
-      // Step 1: city name → coordinates
       const geoRes = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`
       )
@@ -22,9 +21,8 @@ export function useWeather() {
 
       const { latitude, longitude, name, country } = geoData.results[0]
 
-      // Step 2: coordinates → weather
       const weatherRes = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&timezone=auto`
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`
       )
       const weatherData = await weatherRes.json()
 
@@ -34,6 +32,12 @@ export function useWeather() {
         temperature: weatherData.current_weather.temperature,
         windspeed: weatherData.current_weather.windspeed,
         weathercode: weatherData.current_weather.weathercode,
+        forecast: weatherData.daily.time.map((date, i) => ({
+          date,
+          max: weatherData.daily.temperature_2m_max[i],
+          min: weatherData.daily.temperature_2m_min[i],
+          code: weatherData.daily.weathercode[i],
+        })).slice(1, 6) // next 5 days, skip today
       })
 
     } catch (err) {
