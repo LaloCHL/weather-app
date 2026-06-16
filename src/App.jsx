@@ -1,19 +1,39 @@
+import { useState } from 'react'
 import SearchBar from './components/SearchBar'
-import { useWeather } from './hooks/useWeather'
+import CurrentWeather from './components/CurrentWeather'
 import Forecast from './components/Forecast'
+import { useWeather } from './hooks/useWeather'
 
 function App() {
-  const { weather, loading, error, fetchWeather } = useWeather()
+  const { weather, loading, error, fetchWeather, fetchByLocation, getRecent } = useWeather()
+  const [unit, setUnit] = useState('C')
+  const [recent, setRecent] = useState(getRecent())
+
+  function handleSearch(city) {
+    fetchWeather(city)
+    setTimeout(() => setRecent(getRecent()), 100)
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 to-slate-900 flex flex-col items-center justify-start pt-20 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 to-slate-900 flex flex-col items-center justify-start pt-20 px-4 pb-20">
       <h1 className="text-white text-5xl font-bold mb-2 tracking-tight">Weather</h1>
       <p className="text-blue-300 text-sm mb-10">Enter a city to get the current weather</p>
 
-      <SearchBar onSearch={fetchWeather} />
+      <SearchBar
+        onSearch={handleSearch}
+        onLocate={fetchByLocation}
+        recent={recent}
+      />
 
       {loading && (
-        <p className="text-blue-300 mt-10 animate-pulse">Loading...</p>
+        <div className="mt-10 w-full max-w-sm">
+          <div className="bg-white/10 border border-white/20 rounded-2xl p-8 animate-pulse">
+            <div className="h-8 bg-white/20 rounded mb-3 w-1/2 mx-auto"></div>
+            <div className="h-4 bg-white/10 rounded mb-6 w-1/3 mx-auto"></div>
+            <div className="h-20 bg-white/10 rounded mb-4 w-1/3 mx-auto"></div>
+            <div className="h-4 bg-white/10 rounded w-1/2 mx-auto"></div>
+          </div>
+        </div>
       )}
 
       {error && (
@@ -22,15 +42,15 @@ function App() {
         </div>
       )}
 
-      {weather && (
-        <div className="mt-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-white w-full max-w-sm text-center">
-          <h2 className="text-3xl font-bold">{weather.city}</h2>
-          <p className="text-blue-300 text-sm mb-6">{weather.country}</p>
-          <p className="text-7xl font-thin mb-6">{weather.temperature}°</p>
-          <div className="border-t border-white/20 pt-4 text-sm text-blue-200">
-            Wind: {weather.windspeed} km/h
-          </div><Forecast forecast={weather.forecast} />
-        </div>
+      {weather && !loading && (
+        <>
+          <CurrentWeather
+            weather={weather}
+            unit={unit}
+            onToggleUnit={() => setUnit(u => u === 'C' ? 'F' : 'C')}
+          />
+          <Forecast forecast={weather.forecast} unit={unit} />
+        </>
       )}
     </div>
   )

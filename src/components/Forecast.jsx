@@ -8,16 +8,17 @@ const ICONS = {
   95: "⛈️", 96: "⛈️", 99: "⛈️",
 }
 
-function getIcon(code) {
-  return ICONS[code] || "🌡️"
-}
+function getIcon(code) { return ICONS[code] || "🌡️" }
 
 function formatDay(dateStr) {
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+  return new Date(dateStr).toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' })
 }
 
-function Forecast({ forecast }) {
+function Forecast({ forecast, unit }) {
+  function convert(temp) {
+    return unit === 'C' ? Math.round(temp) : Math.round(temp * 9 / 5 + 32)
+  }
+
   return (
     <div className="mt-4 w-full max-w-sm grid grid-cols-5 gap-2">
       {forecast.map((day) => (
@@ -27,8 +28,8 @@ function Forecast({ forecast }) {
         >
           <p className="text-xs text-blue-300 mb-1">{formatDay(day.date)}</p>
           <p className="text-xl mb-1">{getIcon(day.code)}</p>
-          <p className="text-xs font-semibold">{Math.round(day.max)}°</p>
-          <p className="text-xs text-blue-300">{Math.round(day.min)}°</p>
+          <p className="text-xs font-semibold">{convert(day.max)}°</p>
+          <p className="text-xs text-blue-300">{convert(day.min)}°</p>
         </div>
       ))}
     </div>
